@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Birthday Reminder</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>🎂 Birthday Reminder</h1>
+        
+        <!-- Add Birthday Form -->
+        <div class="form-container">
+            <h2>Add New Birthday</h2>
+            <form id="birthdayForm">
+                <input type="text" id="name" placeholder="Enter name" required>
+                <input type="date" id="birthdate" placeholder="dd-mm-yyyy" required>
+                <button type="submit">Add Birthday</button>
+            </form>
+        </div>
+
+        <!-- Birthday List -->
+        <div class="birthday-list">
+            <h2>Birthday List</h2>
+            <div id="birthdayContainer">
+                <!-- Sample data to test -->
+                <div class="birthday-item">
+                    <div class="birthday-info">
+                        <h3>John</h3>
+                        <p>📅 2024-12-25</p>
+                    </div>
+                    <div class="birthday-actions">
+                        <button class="edit-btn" onclick="alert('Edit John')">Edit</button>
+                        <button class="delete-btn" onclick="alert('Delete John')">Delete</button>
+                    </div>
+                </div>
+                <div class="birthday-item">
+                    <div class="birthday-info">
+                        <h3>Mary</h3>
+                        <p>📅 2024-12-10</p>
+                    </div>
+                    <div class="birthday-actions">
+                        <button class="edit-btn" onclick="alert('Edit Mary')">Edit</button>
+                        <button class="delete-btn" onclick="alert('Delete Mary')">Delete</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Edit Modal (Popup for editing) -->
+    <div id="editModal" class="modal">
+        <div class="modal-content">
+            <h2>Edit Birthday</h2>
+            <form id="editForm">
+                <input type="hidden" id="editId">
+                <input type="text" id="editName" placeholder="Enter name" required>
+                <input type="date" id="editBirthdate" required>
+                <button type="submit">Update</button>
+                <button type="button" onclick="closeModal()" style="background: #666;">Cancel</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <div class="footer">
+        <p>Bangaluru Karnataka Mar 19, 2026</p>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
