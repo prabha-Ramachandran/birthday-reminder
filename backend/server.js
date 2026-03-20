@@ -6,9 +6,11 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-mongoose.connect('mongodb://localhost:27017/birthdayDB')
-.then(() => console.log('Connected to MongoDB'))
-.catch(err => console.log('Error:', err));
+// Use environment variable for production, or local for development
+const mongoURI = process.env.MONGODB_URI || 'mongodb://localhost:27017/birthdayDB';
+mongoose.connect(mongoURI)
+.then(() => console.log('✅ Connected to MongoDB'))
+.catch(err => console.log('❌ Error:', err));
 
 const birthdaySchema = new mongoose.Schema({
     name: String,
