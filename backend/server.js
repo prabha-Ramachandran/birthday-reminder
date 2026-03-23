@@ -7,18 +7,14 @@ const app = express();
 
 app.use(cors());
 app.use(express.json());
-
-// Serve frontend files
 app.use(express.static(path.join(__dirname, '../frontend')));
 
-// MongoDB Connection
 const mongoURI = 'mongodb+srv://prabha020623_db_user:xUi37zgEhJTrmdIq@birthdaycluster.ghmgagg.mongodb.net/birthdayDB?retryWrites=true&w=majority&appName=BirthdayCluster';
 
 mongoose.connect(mongoURI)
-.then(() => console.log('✅ Connected to MongoDB'))
-.catch(err => console.log('❌ Error:', err));
+.then(() => console.log('Connected to MongoDB'))
+.catch(err => console.log('Error:', err));
 
-// Schema
 const birthdaySchema = new mongoose.Schema({
     name: String,
     birthdate: String
@@ -26,7 +22,6 @@ const birthdaySchema = new mongoose.Schema({
 
 const Birthday = mongoose.model('Birthday', birthdaySchema);
 
-// GET all birthdays
 app.get('/api/birthdays', async (req, res) => {
     try {
         const birthdays = await Birthday.find();
@@ -36,7 +31,6 @@ app.get('/api/birthdays', async (req, res) => {
     }
 });
 
-// GET single birthday
 app.get('/api/birthdays/:id', async (req, res) => {
     try {
         const birthday = await Birthday.findById(req.params.id);
@@ -47,7 +41,6 @@ app.get('/api/birthdays/:id', async (req, res) => {
     }
 });
 
-// POST - Add new birthday
 app.post('/api/birthdays', async (req, res) => {
     try {
         const newBirthday = new Birthday(req.body);
@@ -58,7 +51,6 @@ app.post('/api/birthdays', async (req, res) => {
     }
 });
 
-// PUT - Update birthday
 app.put('/api/birthdays/:id', async (req, res) => {
     try {
         const updated = await Birthday.findByIdAndUpdate(req.params.id, req.body, { new: true });
@@ -69,7 +61,6 @@ app.put('/api/birthdays/:id', async (req, res) => {
     }
 });
 
-// DELETE - Remove birthday
 app.delete('/api/birthdays/:id', async (req, res) => {
     try {
         await Birthday.findByIdAndDelete(req.params.id);
@@ -79,15 +70,11 @@ app.delete('/api/birthdays/:id', async (req, res) => {
     }
 });
 
-// ========== THIS IS THE PART YOU NEED ==========
-// Serve index.html for all other routes (frontend)
 app.get('*', (req, res) => {
     res.sendFile(path.join(__dirname, '../frontend', 'index.html'));
 });
-// ==============================================
 
-// Start server
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
-    console.log(🚀 Server running on port ${PORT});
+    console.log('Server running on port ' + PORT);
 });
