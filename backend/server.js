@@ -1,18 +1,25 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
+const path = require('path');
 
 const app = express();
+
+// Middleware
 app.use(cors());
 app.use(express.json());
 
-// Connect to LOCAL MongoDB
-const mongoURI = process.env.MONGODB_URI || 'mongodb://localhost:27017/birthdayDB';
-mongoose.connect(mongoURI)
-.then(() => console.log('✅ Connected to MongoDB'))
-.catch(err => console.log('❌ Error:', err));
+// Serve static frontend files
+app.use(express.static(path.join(__dirname, 'frontend')));
 
-// Schema
+// MongoDB Connection
+const mongoURI = 'mongodb+srv://prabha020623_db_user:xUi37zgEhJTrmdIq@birthdaycluster.ghmgagg.mongodb.net/birthdayDB?retryWrites=true&w=majority&appName=BirthdayCluster';
+
+mongoose.connect(mongoURI)
+.then(() => console.log('✅ Connected to MongoDB Atlas'))
+.catch(err => console.log('❌ MongoDB connection error:', err));
+
+// Birthday Schema
 const birthdaySchema = new mongoose.Schema({
     name: String,
     birthdate: String
@@ -20,7 +27,7 @@ const birthdaySchema = new mongoose.Schema({
 
 const Birthday = mongoose.model('Birthday', birthdaySchema);
 
-// ========== ROUTES ==========
+// ========== API ROUTES ==========
 
 // GET all birthdays
 app.get('/api/birthdays', async (req, res) => {
@@ -32,13 +39,11 @@ app.get('/api/birthdays', async (req, res) => {
     }
 });
 
-// GET single birthday by ID
+// GET single birthday
 app.get('/api/birthdays/:id', async (req, res) => {
     try {
         const birthday = await Birthday.findById(req.params.id);
-        if (!birthday) {
-            return res.status(404).json({ error: 'Birthday not found' });
-        }
+        if (!birthday) return res.status(404).json({ error: 'Not found' });
         res.json(birthday);
     } catch (error) {
         res.status(500).json({ error: error.message });
@@ -59,14 +64,8 @@ app.post('/api/birthdays', async (req, res) => {
 // PUT - Update birthday
 app.put('/api/birthdays/:id', async (req, res) => {
     try {
-        const updated = await Birthday.findByIdAndUpdate(
-            req.params.id, 
-            req.body, 
-            { new: true }
-        );
-        if (!updated) {
-            return res.status(404).json({ error: 'Birthday not found' });
-        }
+        const updated = await Birthday.findByIdAndUpdate(req.params.id, req.body, { new: true });
+        if (!updated) return res.status(404).json({ error: 'Not found' });
         res.json(updated);
     } catch (error) {
         res.status(400).json({ error: error.message });
@@ -77,17 +76,20 @@ app.put('/api/birthdays/:id', async (req, res) => {
 app.delete('/api/birthdays/:id', async (req, res) => {
     try {
         const deleted = await Birthday.findByIdAndDelete(req.params.id);
-        if (!deleted) {
-            return res.status(404).json({ error: 'Birthday not found' });
-        }
-        res.json({ message: 'Deleted successfully' });
+        if (!deleted) return res.status(404).json({ error: 'Not found' });
+        res.json({ message: 'Deleted' });
     } catch (error) {
         res.status(500).json({ error: error.message });
     }
 });
 
+// For any other route, serve index.html (frontend)
+app.get('*', (req, res) => {
+    res.sendFile(path.join(__dirname, 'frontend', 'index.html'));
+});
+
 // Start server
-const PORT = 5000;
+const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
-    console.log(`🚀 Server running on http://localhost:${PORT}`);
+    console.log(`🚀 Server running on port ${PORT}`);
 });
