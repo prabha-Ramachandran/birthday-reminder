@@ -1,0 +1,21 @@
+{
+  "name": "birthday-reminder",
+  "version": "1.0.0",
+  "description": "A full-stack web application to manage birthday reminders with complete CRUD operations.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/prabha-Ramachandran/birthday-reminder.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/prabha-Ramachandran/birthday-reminder/issues"
+  },
+  "homepage": "https://github.com/prabha-Ramachandran/birthday-reminder#readme"
+}
